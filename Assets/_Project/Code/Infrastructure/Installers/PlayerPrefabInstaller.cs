@@ -5,7 +5,6 @@ using Gameplay.Stats.Progression;
 using Gameplay.Stats.Upgrade;
 using Infrastructure.Input;
 using ScriptableObjects;
-using UnityEngine;
 using Zenject;
 
 namespace Infrastructure.Installers

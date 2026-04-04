@@ -1,6 +1,5 @@
 ﻿using System;
 using Gameplay.Stats.Progression;
-using Infrastructure.Installers;
 using Zenject;
 
 namespace Gameplay.Stats.Upgrade

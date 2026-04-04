@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ScriptableObjects;
-using Zenject;
 
 namespace Gameplay.Stats
 {
