@@ -25,7 +25,6 @@ namespace Infrastructure.StateMachine.States
         public void Exit()
         {
             Debug.Log($"Exit {nameof(GameplayLoadState)}");
-            //throw new System.NotImplementedException();
         }
     }
 }

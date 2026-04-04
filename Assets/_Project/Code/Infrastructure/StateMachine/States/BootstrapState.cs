@@ -5,6 +5,7 @@ namespace Infrastructure.StateMachine.States
 {
     public class BootstrapState : IState
     {
+        //TODO: LazyInject. Циклическая зависимость между GameStateMachine и стейтами. Попахивает говной
         private readonly LazyInject<IGameStateMachine> _gameStateMachine;
         
         public BootstrapState(LazyInject<IGameStateMachine>  gameStateMachine) => _gameStateMachine = gameStateMachine;
@@ -17,7 +18,6 @@ namespace Infrastructure.StateMachine.States
         public void Exit()
         {
             Debug.Log($"Exit {nameof(BootstrapState)}");
-            //throw new System.NotImplementedException();
         }
     }
 }

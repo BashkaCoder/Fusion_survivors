@@ -7,13 +7,11 @@ namespace Infrastructure.StateMachine.States
         public void Enter()
         {
             Debug.Log($"Enter {nameof(MenuState)}");
-            //throw new System.NotImplementedException();
         }
 
         public void Exit()
         {
             Debug.Log($"Exit {nameof(MenuState)}");
-            //throw new System.NotImplementedException();
         }
     }
 }

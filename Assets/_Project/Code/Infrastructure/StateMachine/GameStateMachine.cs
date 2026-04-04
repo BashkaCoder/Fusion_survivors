@@ -26,9 +26,9 @@ namespace Infrastructure.StateMachine
             
             if (newState == _currentState) return;
             
-            _currentState?.Exit(); //TODO: await?
+            _currentState?.Exit();
             _currentState = newState;
-            _currentState.Enter(); //TODO: await?
+            _currentState.Enter();
         }
     }
 }
