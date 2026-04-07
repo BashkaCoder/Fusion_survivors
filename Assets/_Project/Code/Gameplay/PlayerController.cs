@@ -1,7 +1,10 @@
-﻿using Gameplay.CharacterBehaviour;
+﻿using System.Linq;
+using Gameplay.CharacterBehaviour;
 using Gameplay.Stats;
 using Gameplay.Stats.Progression;
 using Gameplay.Stats.UI;
+using Infrastructure;
+using Infrastructure.Pools;
 using Infrastructure.StateMachine;
 using Infrastructure.StateMachine.States;
 using UnityEngine;
@@ -22,12 +25,15 @@ namespace Gameplay
         //TODO: Включена должна быть только одна из вьюх - зависит от роли: хост/клиент
         private PlayerInfoView _playerInfoView;
         private NetworkedPlayerInfoView _networkedPlayerInfoView;
+        private PlayerVisuals _playerVisuals;
 
         private PlayerControllerProvider  _playerControllerProvider;
         
         private LazyInject<IGameStateMachine> _gameStateMachine;
         
         private BannedPlayersInfo _bannedPlayersInfo;
+
+        private PlayerPool _pool;
         
         [Inject]
         private void Construct(
@@ -38,9 +44,11 @@ namespace Gameplay
             IPlayerProgression playerProgression,
             PlayerInfoView playerInfoView,
             NetworkedPlayerInfoView networkedPlayerInfoView,
+            PlayerVisuals playerVisuals,
             PlayerControllerProvider playerControllerProvider,
             LazyInject<IGameStateMachine> gameStateMachine, 
-            BannedPlayersInfo bannedPlayersInfo)
+            BannedPlayersInfo bannedPlayersInfo,
+            PlayerPool pool)
         {
             _playerMovement = characterMovement;
             _playerAttack = characterAttack;
@@ -49,12 +57,14 @@ namespace Gameplay
             _playerProgression = playerProgression;
             _playerInfoView = playerInfoView;
             _networkedPlayerInfoView = networkedPlayerInfoView;
+            _playerVisuals =  playerVisuals;
             _playerControllerProvider = playerControllerProvider;
             _gameStateMachine = gameStateMachine;
             _bannedPlayersInfo = bannedPlayersInfo;
+            _pool = pool;
         }
         
-        private void Start()
+        private void OnEnable()
         {
             InitializePlayerStats();
             ResetPlayerInfoView();  
@@ -68,7 +78,7 @@ namespace Gameplay
             _playerControllerProvider.Register(this);
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             _playerProgression.Changed -= HandleExperienceChanged;
             _playerProgression.LeveledUp -= HandleLevelUp;
@@ -79,6 +89,13 @@ namespace Gameplay
             _playerControllerProvider.Unregister(this);
         }
 
+        public void Initialize(PlayerSpawnData spawnData)
+        {
+            transform.position = spawnData.SpawnPosition;
+            _playerVisuals.Setup(spawnData.IsHost);
+            _networkedPlayerInfoView.Setup(spawnData.Nickname);
+        }
+        
         private void InitializePlayerStats()
         {
             _playerAttack.SetAttackDamage(_playerStats.Get(StatId.AttackDamage));
@@ -97,9 +114,6 @@ namespace Gameplay
             HandleStatChanged(StatId.MoveSpeed);
             HandleStatChanged(StatId.MaxHealth);
             HandleHealthChanged();
-            
-            //TODO: Tmp-Кринж
-            _networkedPlayerInfoView.Setup("Bashka");
         }
         
         private void HandleExperienceChanged()
@@ -127,8 +141,12 @@ namespace Gameplay
         
         private void HandlePlayerDeath()
         {
+            if (_pool.InactiveItems.Contains(this)) return;
+            
+            _pool.Despawn(this);
             _bannedPlayersInfo.Add(_networkedPlayerInfoView.Nickname);
             _gameStateMachine.Value.SwitchState<ReturnToMenuState>();
+            
         }
     }
 }

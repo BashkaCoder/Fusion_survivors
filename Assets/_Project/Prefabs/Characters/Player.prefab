@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 207668453672467475}
   - component: {fileID: 6928534394488395212}
   - component: {fileID: 5876301593483310911}
+  - component: {fileID: 6292340422145789233}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -86,7 +87,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.5, y: 0.5}
+  m_Size: {x: 0.45, y: 0.5}
   m_EdgeRadius: 0
 --- !u!50 &2240081011840776896
 Rigidbody2D:
@@ -100,7 +101,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
   m_UseAutoMass: 1
-  m_Mass: 0.25
+  m_Mass: 0.225
   m_LinearDamping: 0
   m_AngularDamping: 0
   m_GravityScale: 0
@@ -145,7 +146,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62eb08272b614633b63e8aa777491535, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Infrastructure.Installers.PlayerPrefabInstaller
-  _playerBulletPrefab: {fileID: 2516310207686579481, guid: b35646f943467a4479cd090f343ffec1, type: 3}
 --- !u!114 &9147815048388031891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,8 +207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7836ceb1473484899ee00fbd46453d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.CharacterBehaviour.CharacterHealth
-  CurrentHealth: 0
-  MaxHealth: 0
 --- !u!114 &5876301593483310911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,6 +219,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8174f59cf4b4d4fb46b8426b6f895bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.CharacterBehaviour.PlayerXpCollector
+--- !u!114 &6292340422145789233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134348318401421350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7241b7f539f45acbf02fb62be99eabd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.CharacterBehaviour.PlayerVisuals
+  _animator: {fileID: 7879357838027090759}
+  _hostAnimatorController: {fileID: 9100000, guid: 7e32263aea4da3943ba1dc7d99189eb2, type: 2}
+  _clientAnimatorController: {fileID: 22100000, guid: 84fa60eb0f57ae5478990c8e71e430f3, type: 2}
 --- !u!1 &3449685938969074644
 GameObject:
   m_ObjectHideFlags: 0

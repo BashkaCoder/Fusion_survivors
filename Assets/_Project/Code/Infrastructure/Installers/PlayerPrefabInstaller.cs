@@ -25,6 +25,7 @@ namespace Infrastructure.Installers
             Container.Bind<CharacterAutoAttack>().FromComponentOnRoot().AsSingle();
             Container.Bind<CharacterHealth>().FromComponentOnRoot().AsSingle();
             Container.Bind<PlayerXpCollector>().FromComponentOnRoot().AsSingle();
+            Container.Bind<PlayerVisuals>().FromComponentOnRoot().AsSingle();
             
             Container.Bind<NetworkedPlayerInfoView>().FromComponentInChildren().AsSingle();
             

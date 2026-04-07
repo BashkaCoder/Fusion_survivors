@@ -36,6 +36,7 @@ namespace Infrastructure.Installers
 
         private void BindSpawners()
         {
+            Container.Bind<PlayerSpawner>().AsSingle().WithArguments(_mapBounds);
             Container.BindInterfacesTo<EnemySpawner>().AsSingle().WithArguments(_mapBounds);
             Container.Bind<BulletSpawner>().AsSingle();
             Container.Bind<ExperiencePickupSpawner>().AsSingle();

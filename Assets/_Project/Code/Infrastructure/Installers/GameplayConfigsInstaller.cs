@@ -22,6 +22,7 @@ namespace Infrastructure.Installers
         [SerializeField] private CharacterStatsConfig _enemyStatsConfig;
         
         [Header("Prefabs for pools")]
+        [SerializeField] private PlayerController _playerPrefab;
         [SerializeField] private EnemyController _enemyPrefab;
         [SerializeField] private Bullet _bulletPrefab;
         [SerializeField] private ExperiencePickup _experiencePickupPrefab;
@@ -54,6 +55,12 @@ namespace Infrastructure.Installers
 
         private void BindPools()
         {
+            Container.BindMemoryPool<PlayerController, PlayerPool>()
+                .WithInitialSize(4)
+                .FromComponentInNewPrefab(_playerPrefab)
+                .UnderTransformGroup("Players")
+                .AsCached();
+            
             Container.BindMemoryPool<EnemyController, EnemyPool>()
                 .WithInitialSize(16)
                 .FromComponentInNewPrefab(_enemyPrefab)

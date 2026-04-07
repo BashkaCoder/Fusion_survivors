@@ -17,6 +17,7 @@ MonoBehaviour:
   _upgradeValuesConfig: {fileID: 11400000, guid: 2071f444b77331047bfb77265f695635, type: 2}
   _playerStatsConfig: {fileID: 11400000, guid: 3c7dab26335496b47980937f357f6f7a, type: 2}
   _enemyStatsConfig: {fileID: 11400000, guid: 51aad6eb335fbca4ab69c37cc2b19048, type: 2}
+  _playerPrefab: {fileID: 9147815048388031891, guid: 173f3626e19c9334a8b3421f937fd191, type: 3}
   _enemyPrefab: {fileID: 59939494896860980, guid: ccbb2ab08c4e4534ba6e13694b22400a, type: 3}
   _bulletPrefab: {fileID: 2516310207686579481, guid: b35646f943467a4479cd090f343ffec1, type: 3}
   _experiencePickupPrefab: {fileID: 5880647883456095890, guid: 69df5f391d4ab444fa446bca7d5b7ba3, type: 3}

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Gameplay.CharacterBehaviour;
+﻿using Gameplay.CharacterBehaviour;
 using TMPro;
 using UnityEngine;
 
@@ -16,19 +15,6 @@ namespace Gameplay.Stats.UI
         [SerializeField] private CharacterHealthView _playerHealthView;
         [SerializeField] private CharacterExperienceView _playerExperienceView;
 
-        private Dictionary<StatId, StatView> _statsById;
-
-        private void Awake()
-        {
-            _statsById = new Dictionary<StatId, StatView>()
-            {
-                { StatId.AttackDamage, _attackDamageView},
-                { StatId.AttackSpeed, _attackSpeedView},
-                { StatId.MaxHealth, _maxHealthView},
-                { StatId.MoveSpeed, _moveSpeedView}
-            };
-        }
-        
         public void SetLevel(string levelLabel)
         {
             _levelValue.text = levelLabel;
@@ -36,17 +22,30 @@ namespace Gameplay.Stats.UI
 
         public void SetStat(StatId statId, string formattedValue)
         {
-            _statsById[statId].SetValue(formattedValue);
+            GetStatView(statId).SetValue(formattedValue);
         }
 
         public void SetHealth(float currentHealth, float maxHealth)
         {
             _playerHealthView.Refresh(currentHealth, maxHealth);
         }
-        
+
         public void SetExperience(float currentXp, float maxXp)
         {
             _playerExperienceView.Refresh(currentXp, maxXp);
+        }
+        
+        private StatView GetStatView(StatId statId)
+        {
+            var statView = statId switch
+            {
+                StatId.AttackDamage => _attackDamageView,
+                StatId.AttackSpeed => _attackSpeedView,
+                StatId.MaxHealth => _maxHealthView,
+                StatId.MoveSpeed => _moveSpeedView,
+            };
+
+            return statView;
         }
     }
 }

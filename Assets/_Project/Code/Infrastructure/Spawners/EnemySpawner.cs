@@ -24,7 +24,7 @@ namespace Infrastructure.Spawners
         public void Tick()
         {
             _spawnTimer += Time.deltaTime;
-            if (_spawnTimer >= _worldCombatConfig.SpawnCooldown)
+            if (_spawnTimer >= _worldCombatConfig.EnemySpawnCooldown)
             {
                 _spawnTimer = 0f;
                 Spawn();

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: WorldCombatConfig
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.WorldCombatConfig
   <ProjectileSpeed>k__BackingField: 8
-  <SpawnCooldown>k__BackingField: 0.5
+  <EnemySpawnCooldown>k__BackingField: 0.5
   <ExperienceForKilledEnemy>k__BackingField: 25
