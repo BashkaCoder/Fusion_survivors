@@ -94,6 +94,7 @@ namespace Gameplay
             transform.position = spawnData.SpawnPosition;
             _playerVisuals.Setup(spawnData.IsHost);
             _networkedPlayerInfoView.Setup(spawnData.Nickname);
+            _networkedPlayerInfoView.gameObject.SetActive(!spawnData.IsHost);
         }
         
         private void InitializePlayerStats()

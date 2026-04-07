@@ -1,5 +1,4 @@
-﻿using Gameplay.CharacterBehaviour;
-using Infrastructure.Pools;
+﻿using Infrastructure.Pools;
 using UnityEngine;
 
 namespace Infrastructure.Spawners
@@ -20,7 +19,7 @@ namespace Infrastructure.Spawners
             var spawnData = new PlayerSpawnData
             {
                 SpawnPosition = GetSpawnPosition(),
-                IsHost= isHost ? PlayerVisualType.Host : PlayerVisualType.Client,
+                IsHost= isHost,
                 Nickname = nickname,
             };
 

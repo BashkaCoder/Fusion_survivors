@@ -8,13 +8,9 @@ namespace Gameplay.CharacterBehaviour
         [SerializeField] private RuntimeAnimatorController _hostAnimatorController;
         [SerializeField] private RuntimeAnimatorController _clientAnimatorController;
         
-        public void Setup(PlayerVisualType visualType)
+        public void Setup(bool isHost)
         {
-            _animator.runtimeAnimatorController = visualType switch
-            {
-                PlayerVisualType.Host => _hostAnimatorController,
-                _ => _clientAnimatorController
-            };
+            _animator.runtimeAnimatorController = isHost ? _hostAnimatorController : _clientAnimatorController;
 
             _animator.Rebind();
             _animator.Update(0f);
