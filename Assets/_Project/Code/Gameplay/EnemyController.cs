@@ -40,7 +40,7 @@ namespace Gameplay
             _pool = pool;
         }
 
-        private void Start()
+        private void OnEnable()
         {
             _enemyHealth.OnDied += HandleEnemyDeath;
 
@@ -53,7 +53,7 @@ namespace Gameplay
             _nearestPlayerDirectionProvider.SetEnemyTransform(transform);
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             _enemyHealth.OnDied -= HandleEnemyDeath;
         }
