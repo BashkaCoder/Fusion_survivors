@@ -2,6 +2,7 @@
 
 namespace Gameplay.Stats.Progression
 {
+    //TODO: Зачем интерфейс?
     public interface IPlayerProgression
     {
         int Level { get; }

@@ -1,6 +1,7 @@
 ﻿using Gameplay;
 using Gameplay.Stats.UI;
 using Infrastructure.Spawners;
+using NetCode;
 using UnityEngine;
 using Zenject;
 
@@ -11,7 +12,7 @@ namespace Infrastructure.Installers
     {
         [Header("Player related instances")]
         [SerializeField] private PlayerInfoView _playerInfoView;
-        [SerializeField] private BannedPlayersInfo _bannedPlayersInfo;
+        [SerializeField] private BannedPlayersView _bannedPlayersView;
         
         [Header("Spawner bounds")]
         [SerializeField] private BoxCollider2D _mapBounds;
@@ -21,6 +22,8 @@ namespace Infrastructure.Installers
             BindPlayerInstances();
             BindProviders();
             BindSpawners();
+            
+            Container.Bind<BannedPlayersService>().AsSingle();
         }
 
         private void BindProviders()
@@ -31,13 +34,13 @@ namespace Infrastructure.Installers
         private void BindPlayerInstances()
         {
             Container.BindInstance(_playerInfoView).AsSingle();
-            Container.BindInstance(_bannedPlayersInfo).AsSingle();
+            Container.BindInstance(_bannedPlayersView).AsSingle();
         }
 
         private void BindSpawners()
         {
-            Container.Bind<PlayerSpawner>().AsSingle().WithArguments(_mapBounds);
-            Container.BindInterfacesTo<EnemySpawner>().AsSingle().WithArguments(_mapBounds);
+            //Container.Bind<PlayerSpawner>().AsSingle().WithArguments(_mapBounds);
+            //Container.BindInterfacesTo<EnemySpawner>().AsSingle().WithArguments(_mapBounds);
             Container.Bind<BulletSpawner>().AsSingle();
             Container.Bind<ExperiencePickupSpawner>().AsSingle();
         }

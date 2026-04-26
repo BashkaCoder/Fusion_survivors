@@ -11,15 +11,16 @@ GameObject:
   - component: {fileID: 3180890826047019599}
   - component: {fileID: 2964032460040754}
   - component: {fileID: 2240081011840776896}
-  - component: {fileID: 7081207617439497236}
-  - component: {fileID: 5286993362497903296}
   - component: {fileID: 9147815048388031891}
   - component: {fileID: 485680609885840046}
-  - component: {fileID: 2417966208139402896}
   - component: {fileID: 207668453672467475}
   - component: {fileID: 6928534394488395212}
-  - component: {fileID: 5876301593483310911}
+  - component: {fileID: 2417966208139402896}
   - component: {fileID: 6292340422145789233}
+  - component: {fileID: 5876301593483310911}
+  - component: {fileID: 2238357417553545481}
+  - component: {fileID: 4573962512547493991}
+  - component: {fileID: 2116829814685661562}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -100,7 +101,7 @@ Rigidbody2D:
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 1
-  m_UseAutoMass: 1
+  m_UseAutoMass: 0
   m_Mass: 0.225
   m_LinearDamping: 0
   m_AngularDamping: 0
@@ -112,40 +113,10 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &7081207617439497236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134348318401421350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08eca9f7688a0a24685b89133b020c8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Zenject::Zenject.GameObjectContext
-  _scriptableObjectInstallers: []
-  _monoInstallers:
-  - {fileID: 5286993362497903296}
-  _installerPrefabs: []
-  _autoRun: 1
-  _kernel: {fileID: 0}
---- !u!114 &5286993362497903296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134348318401421350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62eb08272b614633b63e8aa777491535, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Infrastructure.Installers.PlayerPrefabInstaller
 --- !u!114 &9147815048388031891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,6 +129,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5aeaab4d9d4848eab5c50deb8b859924, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.PlayerController
+  _playerMovement: {fileID: 485680609885840046}
+  _characterAnimator: {fileID: 2417966208139402896}
+  _playerAttack: {fileID: 207668453672467475}
+  _playerHealth: {fileID: 6928534394488395212}
+  _networkedPlayerInfoView: {fileID: 1246090177720554807}
+  _playerVisuals: {fileID: 6292340422145789233}
+  _xpCollector: {fileID: 5876301593483310911}
+  _networkRigidbody: {fileID: 2116829814685661562}
 --- !u!114 &485680609885840046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,6 +149,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04287dbfadec704ab22e63dd19272b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MovementBehaviour
+  _rigidbody: {fileID: 2240081011840776896}
+  _LookDirection: {x: 0, y: 0}
+--- !u!114 &207668453672467475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134348318401421350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a474962cee774155a6d6ba08becf8d63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.RangedAttackBehaviour
+  _characterMovement: {fileID: 485680609885840046}
+--- !u!114 &6928534394488395212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134348318401421350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7836ceb1473484899ee00fbd46453d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.CharacterBehaviour.CharacterHealth
 --- !u!114 &2417966208139402896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,42 +189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.MovementAnimatorBehaviour
   _animator: {fileID: 7879357838027090759}
---- !u!114 &207668453672467475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134348318401421350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a474962cee774155a6d6ba08becf8d63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.RangedAttackBehaviour
---- !u!114 &6928534394488395212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134348318401421350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7836ceb1473484899ee00fbd46453d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.CharacterBehaviour.CharacterHealth
---- !u!114 &5876301593483310911
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134348318401421350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8174f59cf4b4d4fb46b8426b6f895bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.CharacterBehaviour.PlayerXpCollector
+  _characterMovement: {fileID: 485680609885840046}
 --- !u!114 &6292340422145789233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,6 +205,75 @@ MonoBehaviour:
   _animator: {fileID: 7879357838027090759}
   _hostAnimatorController: {fileID: 9100000, guid: 7e32263aea4da3943ba1dc7d99189eb2, type: 2}
   _clientAnimatorController: {fileID: 22100000, guid: 84fa60eb0f57ae5478990c8e71e430f3, type: 2}
+--- !u!114 &5876301593483310911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134348318401421350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8174f59cf4b4d4fb46b8426b6f895bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gameplay.CharacterBehaviour.PlayerXpCollector
+--- !u!114 &2238357417553545481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134348318401421350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 717a02054ef2699498e6bd4234fd7995, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Zenject::Zenject.ZenAutoInjecter
+  _containerSource: 2
+--- !u!114 &4573962512547493991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134348318401421350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fusion.Runtime.dll::Fusion.NetworkObject
+  SortKey: 3332605778
+  ObjectInterest: 1
+  Flags: 1
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 9147815048388031891}
+  - {fileID: 485680609885840046}
+  - {fileID: 2116829814685661562}
+  ForceRemoteRenderTimeframe: 0
+--- !u!114 &2116829814685661562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 134348318401421350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e690b5fb1084f5ab1c86457af401d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Fusion.Addons.Physics::Fusion.Addons.Physics.NetworkRigidbody2D
+  _stateAuthorityChangeErrorCorrectionDelta: 0
+  SyncScale: 0
+  SyncParent: 0
+  _interpolationTarget: {fileID: 9216291781894228683}
+  UsePreciseRotation: 0
+  UseRenderSleepThresholds: 1
+  RenderThresholds:
+    UseEnergy: 1
+    Position: 0.01
+    Rotation: 0.01
+    Scale: 0.01
 --- !u!1 &3449685938969074644
 GameObject:
   m_ObjectHideFlags: 0

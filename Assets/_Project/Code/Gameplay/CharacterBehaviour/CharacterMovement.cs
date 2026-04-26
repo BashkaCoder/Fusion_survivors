@@ -1,33 +1,61 @@
+using Fusion;
 using Infrastructure.Input;
 using UnityEngine;
-using Zenject;
 
 namespace Gameplay.CharacterBehaviour
 {
     [RequireComponent(typeof(Rigidbody2D))]
-    public class CharacterMovement : MonoBehaviour
+    public class CharacterMovement : NetworkBehaviour
     {
-        private Rigidbody2D _rigidbody;
-        
-        private IMoveDirectionProvider _moveDirectionProvider;
-        
+        [SerializeField] private Rigidbody2D _rigidbody;
+
+        [Networked] public Vector2 LookDirection { get; private set; }
+
         private float _moveSpeed;
 
-        [Inject]
-        private void Construct(IMoveDirectionProvider provider) => _moveDirectionProvider = provider;
-
-        private void Awake() => _rigidbody = GetComponent<Rigidbody2D>();
-
-        private void FixedUpdate()
+        public override void Spawned()
         {
-            var direction = _moveDirectionProvider.GetDirection();
-            if (direction.sqrMagnitude > 1f) direction.Normalize();
-        
-            Move(direction * (_moveSpeed * Time.fixedDeltaTime));
+            if (Object.HasStateAuthority && LookDirection == Vector2.zero)
+            {
+                LookDirection = Vector2.down;
+            }
         }
 
-        private void Move(Vector2 moveVector) => _rigidbody.MovePosition(_rigidbody.position + moveVector);
-    
-        public void SetMoveSpeed(float moveSpeed) => _moveSpeed = moveSpeed;
+        public override void FixedUpdateNetwork()
+        {
+            if (!GetInput<GameplayInputData>(out var inputData))
+            {
+                Stop();
+                return;
+            }
+
+            var direction = inputData.MoveDirection;
+            if (direction.sqrMagnitude > 1f)
+            {
+                direction.Normalize();
+            }
+
+            if (direction != Vector2.zero)
+            {
+                LookDirection = direction;
+            }
+
+            Move(direction * _moveSpeed);
+        }
+
+        private void Move(Vector2 velocity)
+        {
+            _rigidbody.linearVelocity = velocity;
+        }
+
+        private void Stop()
+        {
+            _rigidbody.linearVelocity = Vector2.zero;
+        }
+
+        public void SetMoveSpeed(float moveSpeed)
+        {
+            _moveSpeed = moveSpeed;
+        }
     }
 }

@@ -1,100 +1,171 @@
-﻿using System.Linq;
+﻿using Fusion;
 using Gameplay.CharacterBehaviour;
+using Fusion.Addons.Physics;
 using Gameplay.Stats;
 using Gameplay.Stats.Progression;
 using Gameplay.Stats.UI;
+using Gameplay.Stats.Upgrade;
 using Infrastructure;
-using Infrastructure.Pools;
+using Infrastructure.Installers;
 using Infrastructure.StateMachine;
 using Infrastructure.StateMachine.States;
+using NetCode;
+using ScriptableObjects;
 using UnityEngine;
 using Zenject;
-
+    
 namespace Gameplay
 {
-    public class PlayerController : MonoBehaviour
+    //TODO: Почему NetworkBehaviour?
+    public class PlayerController : NetworkBehaviour
     {
-        private CharacterMovement _playerMovement;
-        private CharacterAutoAttack _playerAttack;
-        private CharacterHealth _playerHealth;
+        //TODO: приписки "_player" - кринж?
+        [SerializeField] private CharacterMovement _playerMovement;
+        [SerializeField] private CharacterAnimator _characterAnimator;
+        [SerializeField] private CharacterAutoAttack _playerAttack;
+        [SerializeField] private CharacterHealth _playerHealth;
+        [SerializeField] private NetworkedPlayerInfoView _networkedPlayerInfoView;
+        [SerializeField] private PlayerVisuals _playerVisuals;
+        [SerializeField] private PlayerXpCollector _xpCollector;
+        [SerializeField] private NetworkRigidbody2D _networkRigidbody;
         
         private CharacterStatsRuntime _playerStats;
-        
         private IPlayerProgression _playerProgression;
+        private IUpgradePicker _upgradePicker;
+        private Transform _defaultInterpolationTarget;
         
         //TODO: Включена должна быть только одна из вьюх - зависит от роли: хост/клиент
-        private PlayerInfoView _playerInfoView;
-        private NetworkedPlayerInfoView _networkedPlayerInfoView;
-        private PlayerVisuals _playerVisuals;
-
+        private PlayerInfoView _playerInfoView; //From SceneContainer
         private PlayerControllerProvider  _playerControllerProvider;
-        
+        //TODO: А почему тут? Мб лучше будет в том месте, где спавнит(PlayerSpawner/PlayerPool)
+        private BannedPlayersService _bannedPlayersService;
         private LazyInject<IGameStateMachine> _gameStateMachine;
         
-        private BannedPlayersInfo _bannedPlayersInfo;
-
-        private PlayerPool _pool;
+        private CharacterStatsConfig _characterStatsConfig;
+        private PlayerLevelConfig _playerLevelConfig;
+        private UpgradeValuesConfig _upgradeValuesConfig;
+        
+        private bool _isInitialized;
+        
+        [Networked] private NetworkBool IsHost { get; set; }
+        [Networked] private NetworkString<_16> Nickname { get; set; }
         
         [Inject]
         private void Construct(
-            CharacterMovement characterMovement, 
-            CharacterAutoAttack characterAttack, 
-            CharacterHealth characterHealth,
-            CharacterStatsRuntime playerStats,
-            IPlayerProgression playerProgression,
             PlayerInfoView playerInfoView,
-            NetworkedPlayerInfoView networkedPlayerInfoView,
-            PlayerVisuals playerVisuals,
             PlayerControllerProvider playerControllerProvider,
-            LazyInject<IGameStateMachine> gameStateMachine, 
-            BannedPlayersInfo bannedPlayersInfo,
-            PlayerPool pool)
+            BannedPlayersService bannedPlayersService,
+            LazyInject<IGameStateMachine> gameStateMachine,
+            [Inject(Id = CharacterId.Player)] CharacterStatsConfig characterStatsConfig,
+            PlayerLevelConfig playerLevelConfig,
+            UpgradeValuesConfig upgradeValuesConfig)
         {
-            _playerMovement = characterMovement;
-            _playerAttack = characterAttack;
-            _playerHealth = characterHealth;
-            _playerStats = playerStats;
-            _playerProgression = playerProgression;
             _playerInfoView = playerInfoView;
-            _networkedPlayerInfoView = networkedPlayerInfoView;
-            _playerVisuals =  playerVisuals;
             _playerControllerProvider = playerControllerProvider;
+            _bannedPlayersService = bannedPlayersService;
             _gameStateMachine = gameStateMachine;
-            _bannedPlayersInfo = bannedPlayersInfo;
-            _pool = pool;
+            _characterStatsConfig = characterStatsConfig;
+            _playerLevelConfig = playerLevelConfig;
+            _upgradeValuesConfig = upgradeValuesConfig;
+        }
+
+        public void SetSpawnData(PlayerSpawnData spawnData)
+        {
+            //if (!Object.HasStateAuthority) return;
+            
+            IsHost = spawnData.IsHost;
+            Nickname = spawnData.Nickname;
+        }
+
+        public override void Spawned()
+        {
+            if (Runner != null)
+            {
+                Runner.SetIsSimulated(Object, ShouldSimulateLocally());
+            }
+
+            ConfigureRuntimeSmoothing();
+
+            InitializeOnce(); //TODO: Почему once в названии?
         }
         
-        private void OnEnable()
+        public override void Despawned(NetworkRunner runner, bool hasState)
         {
-            InitializePlayerStats();
-            ResetPlayerInfoView();  
+            if (runner != null)
+            {
+                runner.SetIsSimulated(Object, false);
+            }
+
+            Unsubscribe();
+            _playerControllerProvider?.Unregister(this);
+        }
+
+        private void InitializeOnce()
+        {
+            SetupVisuals();
+            SetupRuntime();
+            Subscribe();
+
+            _playerControllerProvider.Register(this);
+        }
+
+        private void ConfigureRuntimeSmoothing()
+        {
+            if (_networkRigidbody == null)
+            {
+                return;
+            }
+
+            _networkRigidbody.InterpolationTarget = ShouldUseInterpolationTarget()
+                ? _defaultInterpolationTarget
+                : null;
+        }
+
+        private bool ShouldSimulateLocally()
+        {
+            return Object != null && (Object.HasStateAuthority || Object.HasInputAuthority);
+        }
+
+        private bool ShouldUseInterpolationTarget()
+        {
+            return _defaultInterpolationTarget != null && Object != null && !Object.HasStateAuthority;
+        }
+        
+        private void SetupVisuals()
+        {
+            _playerVisuals.Setup(IsHost);
+            _networkedPlayerInfoView.Setup(Nickname.ToString());
+            _networkedPlayerInfoView.gameObject.SetActive(!IsHost);
+        }
+        
+        private void SetupRuntime()
+        {
+            _playerStats = new CharacterStatsRuntime(_characterStatsConfig);
+            _upgradePicker = new RandomUpgradePicker(_upgradeValuesConfig);
+            _playerProgression = new PlayerProgression(_playerLevelConfig);
+
+            _xpCollector.Setup(_playerProgression);
             
+            InitializePlayerStats();
+            ResetPlayerInfoView();
+        }
+        
+        private void Subscribe()
+        {
             _playerProgression.Changed += HandleExperienceChanged;
             _playerProgression.LeveledUp += HandleLevelUp;
             _playerStats.Changed += HandleStatChanged;
             _playerHealth.Changed += HandleHealthChanged;
             _playerHealth.OnDied += HandlePlayerDeath;
-            
-            _playerControllerProvider.Register(this);
         }
-
-        private void OnDisable()
+        
+        private void Unsubscribe()
         {
             _playerProgression.Changed -= HandleExperienceChanged;
             _playerProgression.LeveledUp -= HandleLevelUp;
             _playerStats.Changed -= HandleStatChanged;
             _playerHealth.Changed -= HandleHealthChanged;
             _playerHealth.OnDied -= HandlePlayerDeath;
-            
-            _playerControllerProvider.Unregister(this);
-        }
-
-        public void Initialize(PlayerSpawnData spawnData)
-        {
-            transform.position = spawnData.SpawnPosition;
-            _playerVisuals.Setup(spawnData.IsHost);
-            _networkedPlayerInfoView.Setup(spawnData.Nickname);
-            _networkedPlayerInfoView.gameObject.SetActive(!spawnData.IsHost);
         }
         
         private void InitializePlayerStats()
@@ -105,7 +176,7 @@ namespace Gameplay
             _playerHealth.SetMaxHealth(_playerStats.Get(StatId.MaxHealth));
             _playerHealth.RestoreToMax();
         }
-        
+
         private void ResetPlayerInfoView()
         {
             HandleExperienceChanged();
@@ -117,6 +188,28 @@ namespace Gameplay
             HandleHealthChanged();
         }
         
+        // //TODO: Просетапить все и вся. + Вызвать обязательно лол
+        // private void Setup()
+        // {
+        //     var moveDirectionProvider = CreateMoveDirectionProvider();
+        //     _characterAnimator.Setup(moveDirectionProvider);
+        //
+        //     _playerStats = new CharacterStatsRuntime(_characterStatsConfig);
+        //     _upgradePicker = new RandomUpgradePicker(_upgradeValuesConfig);
+        //     _playerProgression = new PlayerProgression(_playerLevelConfig); //TODO: Прокинуть в игроке всем, кому надо
+        //     
+        //     InitializePlayerStats();
+        //     ResetPlayerInfoView();  
+        // }
+        //
+        // public void Initialize(PlayerSpawnData spawnData)
+        // {
+        //     transform.position = spawnData.SpawnPosition;
+        //     _playerVisuals.Setup(spawnData.IsHost);
+        //     _networkedPlayerInfoView.Setup(spawnData.Nickname);
+        //     _networkedPlayerInfoView.gameObject.SetActive(!spawnData.IsHost);
+        // }
+        
         private void HandleExperienceChanged()
         {
             _playerInfoView.SetExperience(_playerProgression.CurrentXp, _playerProgression.Threshold);
@@ -124,9 +217,11 @@ namespace Gameplay
         
         private void HandleLevelUp()
         {
-            _playerInfoView.SetLevel(_playerProgression.Level.ToString());
+            _upgradePicker.GetUpgrade().ApplyTo(_playerStats);
             _playerHealth.RestoreToMax();
+            _playerInfoView.SetLevel(_playerProgression.Level.ToString());
         }
+        
         
         private void HandleStatChanged(StatId statId)
         {
@@ -142,12 +237,13 @@ namespace Gameplay
         
         private void HandlePlayerDeath()
         {
-            if (_pool.InactiveItems.Contains(this)) return;
+            // if (Object.HasStateAuthority)
+            // {
+                _bannedPlayersService.Add(_networkedPlayerInfoView.Nickname);
+            // }
             
-            _pool.Despawn(this);
-            _bannedPlayersInfo.Add(_networkedPlayerInfoView.Nickname);
             _gameStateMachine.Value.SwitchState<ReturnToMenuState>();
-            
         }
+        
     }
 }

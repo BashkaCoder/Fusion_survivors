@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8159d068c3d4fd19572060beb50449e, type: 3}
   m_Name: PlayerStatsConfig
   m_EditorClassIdentifier: Assembly-CSharp::ScriptableObjects.CharacterStatsConfig
-  <Health>k__BackingField: 100
+  <Health>k__BackingField: 1000
   <AttackDamage>k__BackingField: 25
   <AttackSpeed>k__BackingField: 5
   <MoveSpeed>k__BackingField: 5

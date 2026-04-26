@@ -156,7 +156,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8185c5dfa8ba499c929edb8ec258aae8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.EnemyController
-  _experiencePickupPrefab: {fileID: 5880647883456095890, guid: 69df5f391d4ab444fa446bca7d5b7ba3, type: 3}
 --- !u!114 &2034464845235257736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04287dbfadec704ab22e63dd19272b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MovementBehaviour
+  _rigidbody: {fileID: 6929162551226990032}
+  _LookDirection: {x: 0, y: 0}
 --- !u!114 &5738157591282773874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,6 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.MovementAnimatorBehaviour
   _animator: {fileID: 8521661550272221472}
+  _characterMovement: {fileID: 2034464845235257736}
 --- !u!114 &2238304512438994099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,8 +196,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7836ceb1473484899ee00fbd46453d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.CharacterBehaviour.CharacterHealth
-  CurrentHealth: 0
-  MaxHealth: 0
 --- !u!114 &889034673015617492
 MonoBehaviour:
   m_ObjectHideFlags: 0

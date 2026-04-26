@@ -6,7 +6,7 @@ namespace Gameplay.Stats.Upgrade
     {
         private readonly UpgradeValuesConfig _config;
 
-        private RandomUpgradePicker(UpgradeValuesConfig config)
+        public RandomUpgradePicker(UpgradeValuesConfig config)
         {
             _config = config;
         }

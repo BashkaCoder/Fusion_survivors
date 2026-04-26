@@ -55,11 +55,11 @@ namespace Infrastructure.Installers
 
         private void BindPools()
         {
-            Container.BindMemoryPool<PlayerController, PlayerPool>()
-                .WithInitialSize(4)
-                .FromComponentInNewPrefab(_playerPrefab)
-                .UnderTransformGroup("Players")
-                .AsCached();
+            // Container.BindMemoryPool<PlayerController, PlayerPool>()
+            //     .WithInitialSize(4)
+            //     .FromComponentInNewPrefab(_playerPrefab)
+            //     .UnderTransformGroup("Players")
+            //     .AsCached();
             
             Container.BindMemoryPool<EnemyController, EnemyPool>()
                 .WithInitialSize(16)
