@@ -1,20 +1,16 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Gameplay
 {
     public class NetworkedPlayerInfoView : MonoBehaviour
     {
-        [SerializeField] private TMP_Text _nicknameLabel;
+        [SerializeField] private UINameplate _nameplate;
         [SerializeField] private Slider _healthSlider;
-
-        public string Nickname { get; private set; }
         
         public void Setup(string nickname)
         {
-            Nickname = nickname;
-            _nicknameLabel.text = Nickname;
+            _nameplate.Setup(nickname);
         }
 
         public void SetHealth(float current, float maxHealth)

@@ -703,7 +703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e848d274fd74bbc9cf19d46d60b6409, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.NetworkedPlayerInfoView
-  _nicknameLabel: {fileID: 1944537336293242806}
+  _nameplate: {fileID: 936286952967921519}
   _healthSlider: {fileID: 7440928159361252868}
 --- !u!1001 &4481929269627841664
 PrefabInstance:
@@ -722,8 +722,16 @@ PrefabInstance:
       value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 2652444856578333494, guid: f2a7e0074d0ae4a429fc2b5095767337, type: 3}
+      propertyPath: m_isRichText
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652444856578333494, guid: f2a7e0074d0ae4a429fc2b5095767337, type: 3}
       propertyPath: m_fontSizeBase
       value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2652444856578333494, guid: f2a7e0074d0ae4a429fc2b5095767337, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2652444856578333494, guid: f2a7e0074d0ae4a429fc2b5095767337, type: 3}
       propertyPath: m_VerticalAlignment
@@ -822,17 +830,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2a7e0074d0ae4a429fc2b5095767337, type: 3}
---- !u!114 &1944537336293242806 stripped
+--- !u!114 &936286952967921519 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2652444856578333494, guid: f2a7e0074d0ae4a429fc2b5095767337, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3660686428283319279, guid: f2a7e0074d0ae4a429fc2b5095767337, type: 3}
   m_PrefabInstance: {fileID: 4481929269627841664}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: c4f2a01845ebddc47ab9677b03788971, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_EditorClassIdentifier: '::'
 --- !u!224 &5605111737890462892 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8357090469255229484, guid: f2a7e0074d0ae4a429fc2b5095767337, type: 3}

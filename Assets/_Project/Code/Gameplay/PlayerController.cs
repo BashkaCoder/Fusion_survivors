@@ -48,7 +48,7 @@ namespace Gameplay
         private bool _isInitialized;
         
         [Networked] private NetworkBool IsHost { get; set; }
-        [Networked] private NetworkString<_16> Nickname { get; set; }
+        [Networked, OnChangedRender(nameof(OnNicknameChanged))] private string Nickname { get; set; }
         
         [Inject]
         private void Construct(
@@ -69,6 +69,7 @@ namespace Gameplay
             _upgradeValuesConfig = upgradeValuesConfig;
         }
 
+        //TODO: Ревизия
         public void SetSpawnData(PlayerSpawnData spawnData)
         {
             //if (!Object.HasStateAuthority) return;
@@ -79,13 +80,18 @@ namespace Gameplay
 
         public override void Spawned()
         {
+            if (HasInputAuthority)
+            {
+                RPC_SetNickname(PlayerPrefs.GetString("PlayerName"));
+            }
+            
+            OnNicknameChanged();
+            
             if (Runner != null)
             {
                 Runner.SetIsSimulated(Object, ShouldSimulateLocally());
             }
-
             ConfigureRuntimeSmoothing();
-
             InitializeOnce(); //TODO: Почему once в названии?
         }
         
@@ -134,8 +140,8 @@ namespace Gameplay
         private void SetupVisuals()
         {
             _playerVisuals.Setup(IsHost);
-            _networkedPlayerInfoView.Setup(Nickname.ToString());
-            _networkedPlayerInfoView.gameObject.SetActive(!IsHost);
+            _networkedPlayerInfoView.Setup(Nickname);
+            _networkedPlayerInfoView.gameObject.SetActive(!HasInputAuthority);
         }
         
         private void SetupRuntime()
@@ -188,28 +194,6 @@ namespace Gameplay
             HandleHealthChanged();
         }
         
-        // //TODO: Просетапить все и вся. + Вызвать обязательно лол
-        // private void Setup()
-        // {
-        //     var moveDirectionProvider = CreateMoveDirectionProvider();
-        //     _characterAnimator.Setup(moveDirectionProvider);
-        //
-        //     _playerStats = new CharacterStatsRuntime(_characterStatsConfig);
-        //     _upgradePicker = new RandomUpgradePicker(_upgradeValuesConfig);
-        //     _playerProgression = new PlayerProgression(_playerLevelConfig); //TODO: Прокинуть в игроке всем, кому надо
-        //     
-        //     InitializePlayerStats();
-        //     ResetPlayerInfoView();  
-        // }
-        //
-        // public void Initialize(PlayerSpawnData spawnData)
-        // {
-        //     transform.position = spawnData.SpawnPosition;
-        //     _playerVisuals.Setup(spawnData.IsHost);
-        //     _networkedPlayerInfoView.Setup(spawnData.Nickname);
-        //     _networkedPlayerInfoView.gameObject.SetActive(!spawnData.IsHost);
-        // }
-        
         private void HandleExperienceChanged()
         {
             _playerInfoView.SetExperience(_playerProgression.CurrentXp, _playerProgression.Threshold);
@@ -239,11 +223,26 @@ namespace Gameplay
         {
             // if (Object.HasStateAuthority)
             // {
-                _bannedPlayersService.Add(_networkedPlayerInfoView.Nickname);
+                _bannedPlayersService.Add(Nickname);
             // }
             
             _gameStateMachine.Value.SwitchState<ReturnToMenuState>();
         }
         
+        private void OnNicknameChanged()
+        {
+            if (HasInputAuthority)
+            {
+                return;
+            }
+
+            _networkedPlayerInfoView.Setup(Nickname);
+        }
+
+        [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+        private void RPC_SetNickname(string nickname)
+        {
+            Nickname = nickname;
+        }
     }
 }

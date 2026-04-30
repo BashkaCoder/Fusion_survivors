@@ -737,7 +737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _nicknamesParent: {fileID: 1933890606}
-  _playerNicknamePrefab: {fileID: 3660686428283319279, guid: f2a7e0074d0ae4a429fc2b5095767337, type: 3}
+  _uiNameplatePrefab: {fileID: 0}
 --- !u!1001 &1134483773
 PrefabInstance:
   m_ObjectHideFlags: 0
