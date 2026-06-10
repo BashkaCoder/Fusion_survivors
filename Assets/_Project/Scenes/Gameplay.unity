@@ -737,7 +737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   _nicknamesParent: {fileID: 1933890606}
-  _uiNameplatePrefab: {fileID: 0}
+  _uiNameplatePrefab: {fileID: 3660686428283319279, guid: f2a7e0074d0ae4a429fc2b5095767337, type: 3}
 --- !u!1001 &1134483773
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -854,8 +854,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1155252288}
   - component: {fileID: 1155252289}
-  - component: {fileID: 1155252291}
-  - component: {fileID: 1155252292}
   m_Layer: 0
   m_Name: EntryPoint
   m_TagString: Untagged
@@ -892,35 +890,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   _playerControllerPrefab: {fileID: 4573962512547493991, guid: 173f3626e19c9334a8b3421f937fd191, type: 3}
   _spawnBounds: {fileID: 759742646}
---- !u!114 &1155252291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1155252287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8edbe7108d8a43ab838cf8b8d9453df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fusion.Unity::Fusion.RunnerEnableVisibility
---- !u!114 &1155252292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1155252287}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9fd79d79a0fb459ababab9a78f00caa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Fusion.Addons.Physics::Fusion.Addons.Physics.RunnerSimulatePhysics2D
-  _physicsAuthority: 2
-  _physicsTiming: 3
-  ClientPhysicsSimulation: 3
-  DeltaTimeMultiplier: 1
-  SetUnityFixedTimestep: 0
 --- !u!224 &1224963442 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5661835471560013061, guid: 81e5a37c01c1c914691ad1d3ff491893, type: 3}

@@ -74,3 +74,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 257c44a1f070432f92e6d3e8169fe8b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Infrastructure.ProjectInstaller
+  _scenesConfig: {fileID: 11400000, guid: 0bd93eb0923597d4aa20a7e5c9c80a3b, type: 2}
+  _networkRunnerPrefab: {fileID: 2901285272646009913, guid: 98a27a5638ca8ea40a781d0255fb3356, type: 3}

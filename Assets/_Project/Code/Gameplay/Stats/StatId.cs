@@ -2,9 +2,9 @@
 {
     public enum StatId
     {
-        MaxHealth,
-        AttackDamage,
-        AttackSpeed,
-        MoveSpeed,
+        MaxHealth = 0,
+        AttackDamage = 1,
+        AttackSpeed = 2,
+        MoveSpeed = 3,
     }
 }

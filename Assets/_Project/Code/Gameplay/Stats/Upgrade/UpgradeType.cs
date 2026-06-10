@@ -2,7 +2,7 @@
 {
     public enum UpgradeType
     {
-        Add,
-        Multiply,
+        Add = 0,
+        Multiply = 1,
     }
 }

@@ -1,38 +1,96 @@
-﻿using Fusion;
-using Zenject;
+﻿using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
+using Fusion;
+using Infrastructure.Installers;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace NetCode
 {
-    //TODO: бинд в AppBootstrapper/EntryPoint для mainMenu/кнопки в MainMenu
     public class FusionSessionService
     {
-        //TODO: Создание/взятие извне + забиндить
-        private NetworkRunner _networkRunner;
+        //TODO: Не уверене, что консты должны быть здесь
+        private const string AliveNicknamesProperty = "alive_nicknames";
+        private const string BannedNicknamesProperty = "banned_nicknames";
         
-        //TODO: Сделать RoomRegistry? Чтоб прощё было с игроками(как в сетевухе, так и с геймплеем)
+        private readonly NetworkRunner _runnerPrefab;
+        private readonly ScenesConfig _scenesConfig;
         
-        [Inject]
-        private void Construct(NetworkRunner networkRunner)
-        {
-            _networkRunner = networkRunner;
-        }
-        
-        public void CreateRoom(string roomName)
-        {
-            //TODO: Реаилзация через LobbyService?
-        }
+        private NetworkRunner _runnerInstance;
+        private NetworkEvents _networkEvents;
 
-        public void JoinRoom(string roomName)
+        public NetworkEvents NetworkEvents { get { EnsureInstance(); return _networkEvents; } }
+
+        public FusionSessionService(ScenesConfig scenesConfig, NetworkRunner runnerPrefab)
         {
-            //TODO: Реаилзация c проверкой на возможность подключится через LobbyService?
+            _scenesConfig = scenesConfig;
+            _runnerPrefab = runnerPrefab;
         }
 
-        //TODO: Разобраться с чуваком
-        //public void CanJoinRoom(string roomName, string nickname) { return BannedPlayersService.CanJoin(roomName, nickname); }
-
-        public void Shutdown()
+        //TODO: Вызывать
+        public event Action<NetworkRunner, List<SessionInfo>> SessionListChanged;
+        
+        public async UniTask EnsureLobbyJoinedAsync()
         {
-            //TODO: Реаилзация 
+            EnsureInstance();
+            await _runnerInstance.JoinSessionLobby(SessionLobby.ClientServer);
+        }
+
+        public void PrepareHost()
+        {
+            EnsureInstance();
+            //TODO: Реализовать
+        }
+        
+        public void PrepareJoin()
+        {
+            EnsureInstance();
+            //TODO: Реализовать
+        }
+
+        public async UniTask StartPreparedSessionAsync()
+        {
+            EnsureInstance();
+            
+            var customProperties = new Dictionary<string, SessionProperty>
+            {
+                [AliveNicknamesProperty] = "",
+                [BannedNicknamesProperty] = ""
+            };
+            
+            var networkSceneInfo = new NetworkSceneInfo();
+            networkSceneInfo.AddSceneRef(_scenesConfig.GameplaySceneRef);
+            
+            var result = await _runnerInstance.StartGame(new StartGameArgs
+            {
+                Scene = networkSceneInfo,
+                GameMode = GameMode.AutoHostOrClient,
+                SessionName = "Kyrka",
+                SessionProperties = customProperties,
+            });
+
+            if (!result.Ok)
+            {
+                Debug.LogError($"StartGame failed. Reason: {result.ShutdownReason}");
+            }
+        }
+
+        public async UniTask ShutdownToLobbyAsync()
+        {
+            //TODO: Реализовать
+        }
+
+        private void EnsureInstance()
+        {
+            if (_runnerInstance != null)
+            {
+                return;
+            }
+
+            _runnerInstance = Object.Instantiate(_runnerPrefab);
+            _networkEvents = _runnerInstance.GetComponent<NetworkEvents>();
+            Object.DontDestroyOnLoad(_runnerInstance.gameObject);
         }
     }
 }

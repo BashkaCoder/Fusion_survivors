@@ -223,7 +223,7 @@ namespace Gameplay
         {
             // if (Object.HasStateAuthority)
             // {
-                _bannedPlayersService.Add(Nickname);
+            _bannedPlayersService.Add(Nickname);
             // }
             
             _gameStateMachine.Value.SwitchState<ReturnToMenuState>();
@@ -239,6 +239,7 @@ namespace Gameplay
             _networkedPlayerInfoView.Setup(Nickname);
         }
 
+        //TODO: Вопрос к РПЦ? Потому что ведь Nickname у нас [Networked]
         [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
         private void RPC_SetNickname(string nickname)
         {
