@@ -23,6 +23,7 @@ namespace Infrastructure.Installers
             
             //TODO: Сомнительно. Мб в один из стейтов унести?
             Container.Bind<FusionSessionService>().AsSingle().WithArguments(_networkRunnerPrefab); 
+            Container.Bind<RoomNicknamesService>().AsSingle(); 
         }
 
         private void BindGameStateMachine()
