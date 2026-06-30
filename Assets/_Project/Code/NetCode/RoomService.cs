@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Fusion;
-using UnityEngine;
 
 namespace NetCode
 {
@@ -15,9 +14,9 @@ namespace NetCode
 
         private readonly NetworkEvents _networkEvents;
 
-        public RoomService(NetworkEvents networkEvents)
+        public RoomService(FusionSessionService fusionSessionService)
         {
-            _networkEvents = networkEvents;
+            _networkEvents = fusionSessionService.NetworkEvents;
             _networkEvents.OnSessionListUpdate.AddListener(HandleSessionListUpdate);
         }
 

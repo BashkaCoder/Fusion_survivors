@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Text;
 using Fusion;
 using Gameplay;
 using Infrastructure.Input;
@@ -29,11 +27,6 @@ namespace Infrastructure.Entrypoints
             _fusionSessionService = fusionSessionService;
             _bannedPlayersService = bannedPlayersService;
             _bannedPlayersView = bannedPlayersView;
-        }
-        
-        private void Start()
-        {
-            //_fusionSessionService.StartPreparedSessionAsync().Forget();
         }
         
         private void Awake()

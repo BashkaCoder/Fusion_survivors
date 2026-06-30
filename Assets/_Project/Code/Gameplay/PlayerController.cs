@@ -84,7 +84,6 @@ namespace Gameplay
             {
                 RPC_SetNickname(PlayerPrefs.GetString("PlayerName"));
             }
-            
             OnNicknameChanged();
             
             if (Runner != null)

@@ -49,7 +49,7 @@ namespace NetCode
             //TODO: Реализовать
         }
 
-        public async UniTask StartPreparedSessionAsync()
+        public async UniTask StartPreparedSessionAsync(string roomName)
         {
             EnsureInstance();
             
@@ -66,7 +66,7 @@ namespace NetCode
             {
                 Scene = networkSceneInfo,
                 GameMode = GameMode.AutoHostOrClient,
-                SessionName = "Kyrka",
+                SessionName = roomName,
                 SessionProperties = customProperties,
             });
 

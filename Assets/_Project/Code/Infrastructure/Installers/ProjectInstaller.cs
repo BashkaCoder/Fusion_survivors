@@ -22,7 +22,11 @@ namespace Infrastructure.Installers
             Container.BindInterfacesTo<AppBootstrapper>().AsSingle().NonLazy();
             
             //TODO: Сомнительно. Мб в один из стейтов унести?
-            Container.Bind<FusionSessionService>().AsSingle().WithArguments(_networkRunnerPrefab); 
+            Container.Bind<FusionSessionService>().AsSingle().WithArguments(_networkRunnerPrefab);
+            
+            //TODO: Смерджить RoomService и RoomNicknamesService? Или посильнее подумать над названиями классов?
+            Container.Bind<RoomService>().AsSingle();
+            Container.Bind<JoinRequestService>().AsSingle();
             Container.Bind<RoomNicknamesService>().AsSingle(); 
         }
 
