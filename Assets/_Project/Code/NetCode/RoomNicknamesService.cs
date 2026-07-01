@@ -27,7 +27,6 @@ namespace NetCode
             
             var aliveNicknames = NicknameSerializer.DeserializeNicknames(session.Properties[AliveNicknamesProperty]);
             propertiesToUpdate[AliveNicknamesProperty] = NicknameSerializer.SerializeNicknames(aliveNicknames.Append(nickname).ToArray());
-            Debug.Log($"a: {nickname}");
             
             session.UpdateCustomProperties(propertiesToUpdate);
         }
@@ -40,7 +39,6 @@ namespace NetCode
             
             var bannedNicknames = NicknameSerializer.DeserializeNicknames(session.Properties[BannedNicknamesProperty]);
             propertiesToUpdate[BannedNicknamesProperty] = NicknameSerializer.SerializeNicknames(bannedNicknames.Append(nickname).ToArray());
-            Debug.Log($"b: {nickname}");
             
             session.UpdateCustomProperties(propertiesToUpdate);
         }

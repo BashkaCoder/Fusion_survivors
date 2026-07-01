@@ -77,7 +77,7 @@ namespace Infrastructure.Entrypoints
                     {
                         SpawnPosition = spawnPosition,
                         IsHost = isHostPlayer,
-                        Nickname = $"Player {player.PlayerId}",
+                        Nickname = PlayerPrefs.GetString("PlayerName"),
                     });
                 });
 

@@ -18,10 +18,9 @@ GameObject:
   - component: {fileID: 2417966208139402896}
   - component: {fileID: 6292340422145789233}
   - component: {fileID: 5876301593483310911}
-  - component: {fileID: 2238357417553545481}
   - component: {fileID: 4573962512547493991}
   - component: {fileID: 2116829814685661562}
-  - component: {fileID: 6071695411346292609}
+  - component: {fileID: 2238357417553545481}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -218,19 +217,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8174f59cf4b4d4fb46b8426b6f895bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Gameplay.CharacterBehaviour.PlayerXpCollector
---- !u!114 &2238357417553545481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 134348318401421350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717a02054ef2699498e6bd4234fd7995, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Zenject::Zenject.ZenAutoInjecter
-  _containerSource: 2
 --- !u!114 &4573962512547493991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,7 +237,6 @@ MonoBehaviour:
   - {fileID: 9147815048388031891}
   - {fileID: 485680609885840046}
   - {fileID: 2116829814685661562}
-  - {fileID: 6071695411346292609}
   ForceRemoteRenderTimeframe: 0
 --- !u!114 &2116829814685661562
 MonoBehaviour:
@@ -276,7 +261,7 @@ MonoBehaviour:
     Position: 0.01
     Rotation: 0.01
     Scale: 0.01
---- !u!114 &6071695411346292609
+--- !u!114 &2238357417553545481
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -285,9 +270,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 134348318401421350}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5eb3f11d08433a4b8abececf0cc7129, type: 3}
+  m_Script: {fileID: 11500000, guid: 717a02054ef2699498e6bd4234fd7995, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: '::'
+  m_EditorClassIdentifier: Zenject::Zenject.ZenAutoInjecter
+  _containerSource: 2
 --- !u!1 &3449685938969074644
 GameObject:
   m_ObjectHideFlags: 0

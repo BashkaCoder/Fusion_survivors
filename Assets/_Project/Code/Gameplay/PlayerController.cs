@@ -40,6 +40,7 @@ namespace Gameplay
         //TODO: А почему тут? Мб лучше будет в том месте, где спавнит(PlayerSpawner/PlayerPool)
         private BannedPlayersService _bannedPlayersService;
         private LazyInject<IGameStateMachine> _gameStateMachine;
+        private RoomNicknamesService _roomNicknamesService;
         
         private CharacterStatsConfig _characterStatsConfig;
         private PlayerLevelConfig _playerLevelConfig;
@@ -56,6 +57,7 @@ namespace Gameplay
             PlayerControllerProvider playerControllerProvider,
             BannedPlayersService bannedPlayersService,
             LazyInject<IGameStateMachine> gameStateMachine,
+            RoomNicknamesService roomNicknamesService,
             [Inject(Id = CharacterId.Player)] CharacterStatsConfig characterStatsConfig,
             PlayerLevelConfig playerLevelConfig,
             UpgradeValuesConfig upgradeValuesConfig)
@@ -64,6 +66,7 @@ namespace Gameplay
             _playerControllerProvider = playerControllerProvider;
             _bannedPlayersService = bannedPlayersService;
             _gameStateMachine = gameStateMachine;
+            _roomNicknamesService = roomNicknamesService;
             _characterStatsConfig = characterStatsConfig;
             _playerLevelConfig = playerLevelConfig;
             _upgradeValuesConfig = upgradeValuesConfig;
@@ -85,6 +88,8 @@ namespace Gameplay
                 RPC_SetNickname(PlayerPrefs.GetString("PlayerName"));
             }
             OnNicknameChanged();
+            
+            _roomNicknamesService.AddNicknameAlive(Runner.SessionInfo, Nickname);
             
             if (Runner != null)
             {
